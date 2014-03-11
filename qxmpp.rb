@@ -2,26 +2,35 @@ require 'formula'
 require 'requirement'
 
 class Qt5Requirement < Requirement
-  
   fatal true
-  default_formula (which('qmake') && !which('qmake').to_s.include?(HOMEBREW_PREFIX) ? false : 'highfidelity/formulas/qt5')
-  
-  def message
-    qt_version, qt_path = `qmake --version`.scan(/Qt version ([\d.]+) in ([\w.\/]+)/)[0]
-    
-    message = <<-EOS.undent
-      It appears you already have Qt #{qt_version} installed at #{qt_path}.
-      To use Qt 5 that comes with this recipe, first uninstall Qt 5, 
-      then run this command again.
-
-      If you would like to keep your installation of Qt #{qt_version} instead of
-      using the one provided with homebrew, install the formula with
-      the `--without-qt5` option.
-    EOS
-  end
 
   satisfy :build_env => false do
-    which('qmake') && which('qmake').to_s.include?(HOMEBREW_PREFIX)
+    @qmake = which('qmake')
+    @qmake
+  end
+  
+  env do
+    ENV.append_path 'PATH', @qmake.parent
+  end
+  
+  def message
+    message = <<-EOS.undent
+      Homebrew was unable to find an installation of Qt 5, which is required
+      to build qxmpp. If you have Qt 5 installed, make sure that the qmake executable
+      is in your path.
+      
+      If you need to install Qt 5, you can install it with:
+      
+      brew install highfidelity/formulas/qt5
+      
+      (assuming that you have already called `brew tap highfidelity/homebrew-formulas`).
+      
+      If you do not want to use the High Fidelity patched version of Qt 5,
+      you can also install it from the homebrew default formula by calling:
+      
+      brew install qt5
+      
+    EOS
   end
 end
 
