@@ -24,7 +24,7 @@ class Qt5Requirement < Requirement
 
   satisfy :build_env => false do
     qmake_location = which('qmake')
-    qmake_location && qmake_location.include?(HOMEBREW_CELLAR)
+    qmake_location && qmake_location.to_s.include?(HOMEBREW_CELLAR)
   end
 end
 
