@@ -1,7 +1,6 @@
 require 'formula'
 
 class Qt5Requirement < Requirement
-  fatal true
   
   default_formula 'highfidelity/formulas/qt5'
   
@@ -9,22 +8,33 @@ class Qt5Requirement < Requirement
     `qmake --version`.scan(/Qt version ([\d.]+) in ([\w.\/]+)/)[0]
   end
   
+  def qmake_location
+    which('qmake')
+  end
+  
   def message 
     qt_version, qt_path = qt_info
-    <<-EOS.undent
-    It appears you already have Qt #{qt_version} installed at #{qt_path}.
-    To use Qt 5 that comes with this recipe, first uninstall Qt5, 
-    then run this command again.
+    if qmake_location
+      fatal true
+      <<-EOS.undent
+        It appears you already have Qt #{qt_version} installed at #{qt_path}.
+        To use Qt 5 that comes with this recipe, first uninstall Qt5, 
+        then run this command again.
 
-    If you would like to keep your installation of Qt #{qt_version} instead of
-    using the one provided with homebrew, install the formula with
-    the `--without-qt5` option.
-    EOS
+        If you would like to keep your installation of Qt #{qt_version} instead of
+        using the one provided with homebrew, install the formula with
+        the `--without-qt5` option.
+      EOS
+    else
+      fatal false
+      <<-EOS.undent
+        Qt 5 is missing. Installing Qt 5 from High Fidelity formula for patched Qt. 
+      EOS
+    end
   end
 
   satisfy :build_env => false do
-    qmake_location = which('qmake')
-    qmake_location && qmake_location.to_s.include?(HOMEBREW_CELLAR)
+    !qmake_location || !qmake_location.to_s.include?(HOMEBREW_CELLAR)
   end
 end
 
