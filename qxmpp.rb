@@ -6,9 +6,13 @@ class Qxmpp < Formula
   sha1 'a87b4b5c94d1f4dc723cbbb7799cf4067c7e5ea2'
 
   depends_on 'highfidelity/formulas/qt5'
+  
+  option 'static', 'Compile as static library'
 
   def install
-    system "qmake", "-config", "release", "PREFIX=#{prefix}", "QXMPP_LIBRARY_TYPE=staticlib"
+    qmake_args = ["-config", "release", "PREFIX=#{prefix}"]
+    qmake_args << "QXMPP_LIBRARY_TYPE=staticlib" if build.include? 'static'
+    system "qmake", *qmake_args
     system "make"
     system "make install"
   end
