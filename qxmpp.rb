@@ -8,7 +8,7 @@ class Qxmpp < Formula
   depends_on 'highfidelity/formulas/qt5'
 
   def install
-    system "qmake", "-config", "release", "PREFIX=#{prefix}"
+    system "qmake", "-config", "release", "PREFIX=#{prefix}", "QXMPP_LIBRARY_TYPE=staticlib"
     system "make"
     system "make install"
   end
