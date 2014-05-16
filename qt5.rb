@@ -20,7 +20,7 @@ class Qt5 < Formula
   sha1 '31a5cf175bb94dbde3b52780d3be802cbeb19d65'
   
   bottle do
-    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/'
+    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies'
     sha1 "960ee7289d253dcba962c9cd17b8db6e516bb7ef" => :mavericks
   end
   
