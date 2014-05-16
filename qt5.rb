@@ -18,7 +18,12 @@ class Qt5 < Formula
   homepage 'http://qt-project.org/'
   url 'http://download.qt-project.org/official_releases/qt/5.2/5.2.1/single/qt-everywhere-opensource-src-5.2.1.tar.gz'
   sha1 '31a5cf175bb94dbde3b52780d3be802cbeb19d65'
-
+  
+  bottle do
+    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/'
+    sha1 "960ee7289d253dcba962c9cd17b8db6e516bb7ef" => :mavericks
+  end
+  
   head 'git://gitorious.org/qt/qt5.git', :branch => 'stable',
     :using => Qt5HeadDownloadStrategy, :shallow => false
 
