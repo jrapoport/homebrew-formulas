@@ -30,7 +30,6 @@ class Qt5 < Formula
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
 
   option :universal
-  option 'developer', 'Build and link with developer options'
 
   depends_on "pkg-config" => :build
   depends_on "d-bus" => :optional
@@ -44,6 +43,10 @@ class Qt5 < Formula
   patch do
     url 'https://gist.githubusercontent.com/birarda/e0ae11a4c57c95348d63/raw/59561a3385be4bd3ae5e920757327f67509b3ca9/corewlan-bearer.patch'
     sha1 '4adfadc39e5ab386b6915aa88912b9043cce253d' 
+  end
+  
+  devel do
+    
   end
 
   def install
@@ -90,7 +93,7 @@ class Qt5 < Formula
     ENV.append 'CXXFLAGS', '-DQT_NO_BEARERMANAGEMENT'
     args << "-no-feature-bearermanagement"
 
-    args << '-developer-build' if build.include? 'developer'
+    args << '-developer-build' if build.devel?
 
     system "./configure", *args
     system "make"
