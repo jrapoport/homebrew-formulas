@@ -20,7 +20,7 @@ class Qt5 < Formula
   sha1 '31a5cf175bb94dbde3b52780d3be802cbeb19d65'
   
   bottle do
-    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies'
+    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt'
     sha1 "960ee7289d253dcba962c9cd17b8db6e516bb7ef" => :mavericks
   end
   
@@ -46,7 +46,11 @@ class Qt5 < Formula
   end
   
   devel do
-    
+    bottle do
+      root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt/devel'
+      revision 3
+      sha1 "918a0a0d7ac7cad615d9d1431751511b3c96baca" => :mavericks
+    end
   end
 
   def install
