@@ -45,12 +45,8 @@ class Qt5 < Formula
     sha1 '4adfadc39e5ab386b6915aa88912b9043cce253d' 
   end
   
-  devel do
-    bottle do
-      root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt/devel'
-      revision 3
-      sha1 "918a0a0d7ac7cad615d9d1431751511b3c96baca" => :mavericks
-    end
+  def pour_bottle?
+    return !build.devel?
   end
 
   def install
