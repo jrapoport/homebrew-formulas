@@ -22,10 +22,10 @@ class Qt5 < Formula
   bottle do
     root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt'
     sha1 "960ee7289d253dcba962c9cd17b8db6e516bb7ef" => :mavericks
+    sha1 "147e4f738a15ed55602424344bf7d72440a5f6fe" => :mountain_lion
   end
   
-  head 'git://gitorious.org/qt/qt5.git', :branch => 'stable',
-    :using => Qt5HeadDownloadStrategy, :shallow => false
+  head 'git://gitorious.org/qt/qt5.git', :branch => 'stable', :using => Qt5HeadDownloadStrategy, :shallow => false
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
 
