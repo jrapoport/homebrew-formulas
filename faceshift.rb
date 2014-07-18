@@ -1,0 +1,15 @@
+require "formula"
+
+class Faceshift < Formula
+  homepage "http://www.faceshift.com/"
+  url "http://highfidelity-public.s3.amazonaws.com/dependencies/faceshift-1.0.tar.gz"
+  sha1 "380c31ef07920230ad312a3ddb6d7f8450d10271"
+
+  def install
+    system "./configure", "--disable-debug",
+                          "--disable-dependency-tracking",
+                          "--disable-silent-rules",
+                          "--prefix=#{prefix}"
+    system "make", "install"
+  end
+end
