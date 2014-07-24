@@ -1,59 +1,49 @@
-# this is a Qt5 formula patched to remove bearer management so it doesn't constantly scan for wireless networks
-
-require 'formula'
+require "formula"
 
 class Qt5HeadDownloadStrategy < GitDownloadStrategy
   include FileUtils
 
   def stage
     @clone.cd { reset }
-    safe_system 'git', 'clone', @clone, '.'
-    ln_s @clone, 'qt'
-    safe_system './init-repository', '--mirror', "#{Dir.pwd}/"
-    rm 'qt'
+    safe_system "git", "clone", @clone, "."
+    ln_s @clone, "qt"
+    safe_system "./init-repository", "--mirror", "#{Dir.pwd}/"
+    rm "qt"
   end
 end
 
 class Qt5 < Formula
-  homepage 'http://qt-project.org/'
-  url 'http://download.qt-project.org/official_releases/qt/5.2/5.2.1/single/qt-everywhere-opensource-src-5.2.1.tar.gz'
-  sha1 '31a5cf175bb94dbde3b52780d3be802cbeb19d65'
-  
-  bottle do
-    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt'
-    sha1 "960ee7289d253dcba962c9cd17b8db6e516bb7ef" => :mavericks
-    sha1 "147e4f738a15ed55602424344bf7d72440a5f6fe" => :mountain_lion
-  end
-  
-  head 'git://gitorious.org/qt/qt5.git', :branch => 'stable', :using => Qt5HeadDownloadStrategy, :shallow => false
+  homepage "http://qt-project.org/"
+  url "http://download.qt-project.org/official_releases/qt/5.3/5.3.1/single/qt-everywhere-opensource-src-5.3.1.tar.gz"
+  sha1 "3244dd34f5fb695e903eaa49c6bd0838b9bf7a73"
+
+  head "git://gitorious.org/qt/qt5.git", :branch => "stable",
+    :using => Qt5HeadDownloadStrategy, :shallow => false
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
 
   option :universal
+  option "with-docs", "Build documentation"
+  option "developer", "Build and link with developer options"
 
   depends_on "pkg-config" => :build
   depends_on "d-bus" => :optional
   depends_on "mysql" => :optional
-
-  odie 'qt5: --with-qtdbus has been renamed to --with-d-bus' if build.with? "qtdbus"
-  odie 'qt5: --with-demos-examples is no longer supported' if build.with? "demos-examples"
-  odie 'qt5: --with-debug-and-release is no longer supported' if build.with? "debug-and-release"
+  depends_on :xcode => :build
+  
+  bottle do
+    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt'
+    revision 1
+    sha1 "cfb272f8a4b6ff1633a5832913ca4df787782952" => :mavericks
+  end
   
   # fix exclusion of QT_NO_BEARER_MANAGEMENT in qcorewlanegine.mm
   patch do
-    url 'https://gist.githubusercontent.com/birarda/e0ae11a4c57c95348d63/raw/59561a3385be4bd3ae5e920757327f67509b3ca9/corewlan-bearer.patch'
-    sha1 '4adfadc39e5ab386b6915aa88912b9043cce253d' 
-  end
-  
-  def pour_bottle?
-    return !build.devel?
+    url 'https://gist.githubusercontent.com/birarda/5c3e0f4979279eb6c959/raw/10f841822398f3dfa1122b6726879acc06a13bde/gistfile1.txt'
+    sha1 'b0fa7810264783c07672ba73a342d832d3e6a29a' 
   end
 
   def install
-    # fixed hardcoded link to plugin dir: https://bugreports.qt-project.org/browse/QTBUG-29188
-    inreplace "qttools/src/macdeployqt/macdeployqt/main.cpp", "deploymentInfo.pluginPath = \"/Developer/Applications/Qt/plugins\";",
-              "deploymentInfo.pluginPath = \"#{prefix}/plugins\";"
-
     ENV.universal_binary if build.universal?
     args = ["-prefix", prefix,
             "-system-zlib",
@@ -61,19 +51,15 @@ class Qt5 < Formula
             "-confirm-license", "-opensource",
             "-nomake", "examples",
             "-nomake", "tests",
+            "-skip", "qtenginio",
             "-release"]
-
-    unless MacOS::CLT.installed?
-      # ... too stupid to find CFNumber.h, so we give a hint:
-      ENV.append 'CXXFLAGS', "-I#{MacOS.sdk_path}/System/Library/Frameworks/CoreFoundation.framework/Headers"
-    end
 
     # https://bugreports.qt-project.org/browse/QTBUG-34382
     args << "-no-xcb"
 
-    args << "-plugin-sql-mysql" if build.with? 'mysql'
+    args << "-plugin-sql-mysql" if build.with? "mysql"
 
-    if build.with? 'd-bus'
+    if build.with? "d-bus"
       dbus_opt = Formula["d-bus"].opt_prefix
       args << "-I#{dbus_opt}/lib/dbus-1.0/include"
       args << "-I#{dbus_opt}/include/dbus-1.0"
@@ -83,23 +69,23 @@ class Qt5 < Formula
     end
 
     if MacOS.prefer_64_bit? or build.universal?
-      args << '-arch' << 'x86_64'
+      args << "-arch" << "x86_64"
     end
 
     if !MacOS.prefer_64_bit? or build.universal?
-      args << '-arch' << 'x86'
+      args << "-arch" << "x86"
     end
-    
-    ENV.append 'CXXFLAGS', '-DQT_NO_BEARERMANAGEMENT'
-    args << "-no-feature-bearermanagement"
 
-    args << '-developer-build' if build.devel?
+    args << "-developer-build" if build.include? "developer"
+    
+    ENV.append 'CXXFLAGS', '-DQT_NO_BEARER_MANAGEMENT'
+    args << "-no-feature-bearermanagement"
 
     system "./configure", *args
     system "make"
     ENV.j1
     system "make install"
-    if build.with? 'docs'
+    if build.with? "docs"
       system "make", "docs"
       system "make", "install_docs"
     end
