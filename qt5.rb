@@ -14,11 +14,17 @@ end
 
 class Qt5 < Formula
   homepage "http://qt-project.org/"
-  url "http://download.qt-project.org/official_releases/qt/5.3/5.3.1/single/qt-everywhere-opensource-src-5.3.1.tar.gz"
-  sha1 "3244dd34f5fb695e903eaa49c6bd0838b9bf7a73"
+  url "http://download.qt-project.org/official_releases/qt/5.3/5.3.2/single/qt-everywhere-opensource-src-5.3.2.tar.gz"
+  sha1 "502dd2db1e9ce349bb8ac48b4edf7f768df1cafe"
 
   head "git://gitorious.org/qt/qt5.git", :branch => "stable",
     :using => Qt5HeadDownloadStrategy, :shallow => false
+    
+  bottle do
+    root_url 'http://hifi-public.s3.amazonaws.com/dependencies/qt'
+    revision 1
+    sha1 "5be505fa4867c7932bf52d99d4e2805209ed0401" => :mavericks
+  end
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
 
@@ -30,12 +36,6 @@ class Qt5 < Formula
   depends_on "d-bus" => :optional
   depends_on "mysql" => :optional
   depends_on :xcode => :build
-  
-  bottle do
-    root_url 'http://highfidelity-public.s3.amazonaws.com/dependencies/qt'
-    revision 1
-    sha1 "cfb272f8a4b6ff1633a5832913ca4df787782952" => :mavericks
-  end
   
   # fix exclusion of QT_NO_BEARER_MANAGEMENT in qcorewlanegine.mm
   patch do
