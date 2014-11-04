@@ -42,6 +42,10 @@ class Qt5 < Formula
     sha1 '4adfadc39e5ab386b6915aa88912b9043cce253d' 
   end
   
+  # Patch to fix compile errors on Yosemite. Can be removed with 5.4.
+  # https://bugreports.qt-project.org/browse/QTBUG-41136
+  patch :DATA
+  
   def pour_bottle?
     return !build.devel?
   end
@@ -128,3 +132,18 @@ class Qt5 < Formula
     EOS
   end
 end
+
+__END__
+diff --git a/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm b/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm
+index a73974c..d3f3eae 100644
+--- a/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm
++++ b/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm
+@@ -322,7 +322,7 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
+     //AVPlayerItem "status" property value observer.
+     if (context == AVFMediaPlayerSessionObserverStatusObservationContext)
+     {
+-        AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
++        AVPlayerStatus status = (AVPlayerStatus)[[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+         switch (status)
+         {
+             //Indicates that the status of the player is not yet known because
