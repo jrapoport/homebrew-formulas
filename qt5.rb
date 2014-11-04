@@ -47,30 +47,23 @@ class Qt5 < Formula
   end
 
   def install
-    # fixed hardcoded link to plugin dir: https://bugreports.qt-project.org/browse/QTBUG-29188
-    inreplace "qttools/src/macdeployqt/macdeployqt/main.cpp", "deploymentInfo.pluginPath = \"/Developer/Applications/Qt/plugins\";",
-              "deploymentInfo.pluginPath = \"#{prefix}/plugins\";"
-
     ENV.universal_binary if build.universal?
+    
     args = ["-prefix", prefix,
             "-system-zlib",
             "-qt-libpng", "-qt-libjpeg",
             "-confirm-license", "-opensource",
-            "-nomake", "examples",
             "-nomake", "tests",
             "-release"]
 
-    unless MacOS::CLT.installed?
-      # ... too stupid to find CFNumber.h, so we give a hint:
-      ENV.append 'CXXFLAGS', "-I#{MacOS.sdk_path}/System/Library/Frameworks/CoreFoundation.framework/Headers"
-    end
+    args << "-nomake" << "examples" if build.without? "examples"
 
     # https://bugreports.qt-project.org/browse/QTBUG-34382
     args << "-no-xcb"
 
-    args << "-plugin-sql-mysql" if build.with? 'mysql'
+    args << "-plugin-sql-mysql" if build.with? "mysql"
 
-    if build.with? 'd-bus'
+    if build.with? "d-bus"
       dbus_opt = Formula["d-bus"].opt_prefix
       args << "-I#{dbus_opt}/lib/dbus-1.0/include"
       args << "-I#{dbus_opt}/include/dbus-1.0"
@@ -80,23 +73,29 @@ class Qt5 < Formula
     end
 
     if MacOS.prefer_64_bit? or build.universal?
-      args << '-arch' << 'x86_64'
+      args << "-arch" << "x86_64"
     end
 
     if !MacOS.prefer_64_bit? or build.universal?
-      args << '-arch' << 'x86'
+      args << "-arch" << "x86"
+    end
+
+    if build.with? "oci"
+      args << "-I#{ENV['ORACLE_HOME']}/sdk/include"
+      args << "-L{ENV['ORACLE_HOME']}"
+      args << "-plugin-sql-oci"
     end
     
     ENV.append 'CXXFLAGS', '-DQT_NO_BEARERMANAGEMENT'
     args << "-no-feature-bearermanagement"
 
-    args << '-developer-build' if build.devel?
+    args << "-developer-build" if build.include? "developer"
 
     system "./configure", *args
     system "make"
     ENV.j1
     system "make install"
-    if build.with? 'docs'
+    if build.with? "docs"
       system "make", "docs"
       system "make", "install_docs"
     end
@@ -118,7 +117,7 @@ class Qt5 < Formula
 
     Pathname.glob("#{bin}/*.app") { |app| mv app, prefix }
   end
-
+    
   test do
     system "#{bin}/qmake", "-project"
   end
