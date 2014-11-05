@@ -26,6 +26,7 @@ class Qt5 < Formula
     root_url 'http://hifi-public.s3.amazonaws.com/dependencies/qt'
     revision 1
     sha1 "5be505fa4867c7932bf52d99d4e2805209ed0401" => :mavericks
+    sha1 "e7780d393748c18fd697f207aa2702702cf483d5" => :yosemite
   end
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
