@@ -31,10 +31,16 @@ class Qt5 < Formula
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
 
   option :universal
+  option "with-docs", "Build documentation"
+  option "with-examples", "Build examples"
+  option "developer", "Build and link with developer options"
 
   depends_on "pkg-config" => :build
   depends_on "d-bus" => :optional
-  depends_on "mysql" => :optional
+  depends_on :mysql => :optional
+  depends_on :xcode => :build
+  
+  deprecated_option "qtdbus" => "with-d-bus"
   
   # fix exclusion of QT_NO_BEARER_MANAGEMENT in qcorewlanegine.mm
   patch do
@@ -58,6 +64,7 @@ class Qt5 < Formula
             "-qt-libpng", "-qt-libjpeg",
             "-confirm-license", "-opensource",
             "-nomake", "tests",
+            "-skip", "qtenginio",
             "-release"]
 
     args << "-nomake" << "examples" if build.without? "examples"
@@ -82,12 +89,6 @@ class Qt5 < Formula
 
     if !MacOS.prefer_64_bit? or build.universal?
       args << "-arch" << "x86"
-    end
-
-    if build.with? "oci"
-      args << "-I#{ENV['ORACLE_HOME']}/sdk/include"
-      args << "-L{ENV['ORACLE_HOME']}"
-      args << "-plugin-sql-oci"
     end
     
     ENV.append 'CXXFLAGS', '-DQT_NO_BEARERMANAGEMENT'
