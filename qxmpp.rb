@@ -41,13 +41,10 @@ class Qxmpp < Formula
 
   depends_on Qt5Requirement => :recommended
   
-  option 'static', 'Compile as static library'
-  
   patch :DATA
 
   def install
     qmake_args = ["-config", "release", "PREFIX=#{prefix}"]
-    qmake_args << "QXMPP_LIBRARY_TYPE=staticlib" if build.include? 'static'
     system "qmake", *qmake_args
     system "make"
     system "make install"
