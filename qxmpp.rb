@@ -42,6 +42,8 @@ class Qxmpp < Formula
   depends_on Qt5Requirement => :recommended
   
   option 'static', 'Compile as static library'
+  
+  patch :DATA
 
   def install
     qmake_args = ["-config", "release", "PREFIX=#{prefix}"]
@@ -51,3 +53,19 @@ class Qxmpp < Formula
     system "make install"
   end
 end
+
+__END__
+diff --git a/src/src.pro b/src/src.pro
+index 954738c..8404c8c 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -4,7 +4,7 @@ QT -= gui
+ 
+ TEMPLATE = lib
+ 
+-CONFIG += $$QXMPP_LIBRARY_TYPE
++CONFIG += $$QXMPP_LIBRARY_TYPE c++11
+ DEFINES += QXMPP_BUILD
+ DEFINES += $$QXMPP_INTERNAL_DEFINES
+ INCLUDEPATH += $$QXMPP_INCLUDEPATH $$QXMPP_INTERNAL_INCLUDES
+ 
