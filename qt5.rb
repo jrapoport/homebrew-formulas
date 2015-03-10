@@ -16,8 +16,8 @@ end
 
 class Qt5 < Formula
   homepage "http://qt-project.org/"
-  url "http://download.qt-project.org/official_releases/qt/5.3/5.3.2/single/qt-everywhere-opensource-src-5.3.2.tar.gz"
-  sha1 "502dd2db1e9ce349bb8ac48b4edf7f768df1cafe"
+  url "http://download.qt-project.org/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.gz"
+  sha1 "06a510e1019f3d42d122b89b912332e804da41e1"
 
   head "git://gitorious.org/qt/qt5.git", :branch => "stable",
     :using => Qt5HeadDownloadStrategy, :shallow => false
@@ -25,8 +25,8 @@ class Qt5 < Formula
   bottle do
     root_url 'http://hifi-public.s3.amazonaws.com/dependencies/qt'
     revision 1
-    sha1 "5be505fa4867c7932bf52d99d4e2805209ed0401" => :mavericks
-    sha1 "e7780d393748c18fd697f207aa2702702cf483d5" => :yosemite
+    sha1 "b42703713ebe0269ac79ebfb584aee339894d9fc" => :yosemite
+    sha1 "136dc55c402499644c39c53ef394eaf8bc2621fd" => :mavericks
   end
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
@@ -45,13 +45,9 @@ class Qt5 < Formula
   
   # fix exclusion of QT_NO_BEARER_MANAGEMENT in qcorewlanegine.mm
   patch do
-    url 'https://gist.githubusercontent.com/birarda/e0ae11a4c57c95348d63/raw/59561a3385be4bd3ae5e920757327f67509b3ca9/corewlan-bearer.patch'
-    sha1 '4adfadc39e5ab386b6915aa88912b9043cce253d' 
+    url 'https://gist.githubusercontent.com/birarda/c8b48f06a8a33b5bf952/raw/7fb6925f4e2cda8b4538c56a529b07de2c5bf895/corewlan-bearer.5.4.0.patch'
+    sha1 '9aecfda8129afbe31c860cda4c6776e49264b8b4' 
   end
-  
-  # Patch to fix compile errors on Yosemite. Can be removed with 5.4.
-  # https://bugreports.qt-project.org/browse/QTBUG-41136
-  patch :DATA
   
   def pour_bottle?
     return !build.devel?
@@ -134,18 +130,3 @@ class Qt5 < Formula
     EOS
   end
 end
-
-__END__
-diff --git a/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm b/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm
-index a73974c..d3f3eae 100644
---- a/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm
-+++ b/qtmultimedia/src/plugins/avfoundation/mediaplayer/avfmediaplayersession.mm
-@@ -322,7 +322,7 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
-     //AVPlayerItem "status" property value observer.
-     if (context == AVFMediaPlayerSessionObserverStatusObservationContext)
-     {
--        AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-+        AVPlayerStatus status = (AVPlayerStatus)[[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-         switch (status)
-         {
-             //Indicates that the status of the player is not yet known because
