@@ -16,17 +16,15 @@ end
 
 class Qt5 < Formula
   homepage "http://qt-project.org/"
-  url "http://download.qt-project.org/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.gz"
-  sha1 "06a510e1019f3d42d122b89b912332e804da41e1"
+  url "http://download.qt-project.org/official_releases/qt/5.4/5.4.1/single/qt-everywhere-opensource-src-5.4.1.tar.gz"
+  sha1 "e696b353a80ad53bcfd9535e744b5cd3246f5fd1"
 
   head "git://gitorious.org/qt/qt5.git", :branch => "stable",
     :using => Qt5HeadDownloadStrategy, :shallow => false
-    
+  
   bottle do
     root_url 'http://hifi-public.s3.amazonaws.com/dependencies/qt'
-    revision 1
-    sha1 "b42703713ebe0269ac79ebfb584aee339894d9fc" => :yosemite
-    sha1 "136dc55c402499644c39c53ef394eaf8bc2621fd" => :mavericks
+    sha256 "603493b9f829519b4d9530a2340cc7360c1c4181972cba82c23ac0d6e5bc4c71" => :yosemite
   end
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
