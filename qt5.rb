@@ -24,7 +24,7 @@ class Qt5 < Formula
   
   bottle do
     root_url 'http://hifi-public.s3.amazonaws.com/dependencies/qt'
-    sha256 "dd768225040ed8728cca34a94e5feaaed1de05fceacbfe8942ada9dbf825ded9" => :yosemite
+    sha256 "12ff4e151d4f93a8522f21d4a48fffa974a29b81002a840ff0ee3467a01fe62e" => :yosemite
     revision 1
   end
 
