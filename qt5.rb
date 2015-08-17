@@ -50,8 +50,8 @@ class Qt5 < Formula
   
   # modify texture shader in WebCore to support core profile
   patch do
-    url 'https://gist.githubusercontent.com/birarda/5733ea7858a491846de1/raw/2e38f86acf9f3b68e09b01eefdc38c572d4dcd6f/QtGlCoreFix.patch'
-    sha1 'c3188e4df88acd0d9f3a7cbc12cf0cba2f595207'
+    url 'https://gist.githubusercontent.com/birarda/5733ea7858a491846de1/raw/5af0acbd786a37da828225aca910cb583858e780/QtGlCoreFix.patch'
+    sha1 'a4f0f7aa83eb55eb5be151bf9305cf1bb773a7f0'
   end
   
   def pour_bottle?
