@@ -24,7 +24,8 @@ class Qt5 < Formula
   
   bottle do
     root_url 'http://hifi-public.s3.amazonaws.com/dependencies/qt'
-    sha256 "603493b9f829519b4d9530a2340cc7360c1c4181972cba82c23ac0d6e5bc4c71" => :yosemite
+    sha256 "12ff4e151d4f93a8522f21d4a48fffa974a29b81002a840ff0ee3467a01fe62e" => :yosemite
+    revision 1
   end
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
@@ -45,6 +46,12 @@ class Qt5 < Formula
   patch do
     url 'https://gist.githubusercontent.com/birarda/c8b48f06a8a33b5bf952/raw/7fb6925f4e2cda8b4538c56a529b07de2c5bf895/corewlan-bearer.5.4.0.patch'
     sha1 '9aecfda8129afbe31c860cda4c6776e49264b8b4' 
+  end
+  
+  # modify texture shader in WebCore to support core profile
+  patch do
+    url 'https://gist.githubusercontent.com/birarda/5733ea7858a491846de1/raw/5af0acbd786a37da828225aca910cb583858e780/QtGlCoreFix.patch'
+    sha1 'a4f0f7aa83eb55eb5be151bf9305cf1bb773a7f0'
   end
   
   def pour_bottle?
