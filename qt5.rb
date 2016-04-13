@@ -16,8 +16,8 @@ end
 
 class Qt5 < Formula
   homepage "http://qt-project.org/"
-  url "http://download.qt-project.org/official_releases/qt/5.4/5.4.1/single/qt-everywhere-opensource-src-5.4.1.tar.gz"
-  sha1 "e696b353a80ad53bcfd9535e744b5cd3246f5fd1"
+  url "http://download.qt-project.org/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz"
+  sha1 "3d7e7805d849bcf6cf88788bc83aeb334e1cd875"
 
   head "git://gitorious.org/qt/qt5.git", :branch => "stable",
     :using => Qt5HeadDownloadStrategy, :shallow => false
@@ -43,10 +43,10 @@ class Qt5 < Formula
   deprecated_option "qtdbus" => "with-d-bus"
   
   # fix exclusion of QT_NO_BEARER_MANAGEMENT in qcorewlanegine.mm
-  patch do
-    url 'https://gist.githubusercontent.com/birarda/c8b48f06a8a33b5bf952/raw/7fb6925f4e2cda8b4538c56a529b07de2c5bf895/corewlan-bearer.5.4.0.patch'
-    sha1 '9aecfda8129afbe31c860cda4c6776e49264b8b4' 
-  end
+  #patch do
+  #  url 'https://gist.githubusercontent.com/birarda/c8b48f06a8a33b5bf952/raw/7fb6925f4e2cda8b4538c56a529b07de2c5bf895/corewlan-bearer.5.4.0.patch'
+  #  sha1 '9aecfda8129afbe31c860cda4c6776e49264b8b4' 
+  #end
   
   # modify texture shader in WebCore to support core profile
   patch do
