@@ -16,7 +16,7 @@ end
 
 class Qt5 < Formula
   homepage "http://qt-project.org/"
-  url "http://download.qt-project.org/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz"
+  url "http://download.qt-project.org/official_releases/qt/5.6/5.6.0/single/qt-everywhere-opensource-src-5.6.0.tar.gz"
   sha1 "3d7e7805d849bcf6cf88788bc83aeb334e1cd875"
 
   head "git://gitorious.org/qt/qt5.git", :branch => "stable",
