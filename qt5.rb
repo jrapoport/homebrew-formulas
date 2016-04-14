@@ -49,10 +49,10 @@ class Qt5 < Formula
   #end
   
   # modify texture shader in WebCore to support core profile
-  patch do
-    url 'https://gist.githubusercontent.com/birarda/5733ea7858a491846de1/raw/5af0acbd786a37da828225aca910cb583858e780/QtGlCoreFix.patch'
-    sha1 'a4f0f7aa83eb55eb5be151bf9305cf1bb773a7f0'
-  end
+  #patch do
+  #  url 'https://gist.githubusercontent.com/birarda/5733ea7858a491846de1/raw/5af0acbd786a37da828225aca910cb583858e780/QtGlCoreFix.patch'
+  #  sha1 'a4f0f7aa83eb55eb5be151bf9305cf1bb773a7f0'
+  #end
   
   def pour_bottle?
     return !build.devel?
